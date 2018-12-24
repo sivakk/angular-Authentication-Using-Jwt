@@ -7,10 +7,10 @@ import { Routes, RouterModule } from '@angular/router';
 
 
 const routes: Routes = [
-    {
-        path: 'studentbuilder',
-        loadChildren: 'app/studentbuilder/studentbuilder.module#StudentbuilderModule'
-    },
+    // {
+    //     path: 'studentbuilder',
+    //     loadChildren: 'app/studentbuilder/studentbuilder.module#StudentbuilderModule'
+    // },
 
     {
         path: '**',
