@@ -17,22 +17,47 @@ var jwt = require("jsonwebtoken");
 
 router.post('/signup', (req, res, next) => {
 
-    const schema = Joi.object().keys({
-        email: Joi.string()
-            .email({ minDomainAtoms: 2 })
-            .required(),
-        password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).required()
+    bcryptjs.hash(req.body.password, 10).then(
+        hash => {
+            const user = new User({
+                email: req.body.email,
+                password: hash
+            });
+            user.save().then(result => {
+                res.status(201).json({
+                    message: 'User Created!',
+                    result: result
+                });
+            })
+                .catch(err => {
+                    res.status(500).json({
+                        error: err
+                    });
+                });
+        }
+
+    )
 
 
-    });
 
 
-    const { value, error } = Joi.validate(req.body, schema);
-    if (error && error.details) {
-        return res.status(BAD_REQUEST).json(error);
-    }
-    const user = User.create(value);
-    return res.json(user);
+
+    // const schema = Joi.object().keys({
+    //     email: Joi.string()
+    //         .email({ minDomainAtoms: 2 })
+    //         .required(),
+    //     password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).required()
+
+
+    // });
+
+
+    // const { value, error } = Joi.validate(req.body, schema);
+    // if (error && error.details) {
+    //     return res.status(BAD_REQUEST).json(error);
+    // }
+    // const user = User.create(value);
+    // return res.json(user);
 
 });
 router.post('/login', (req, res, next) => {

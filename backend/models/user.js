@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const bcryptjs = require('bcryptjs');
+const uniquevalidator = require('mongoose-unique-validator');
 
 
 const UserSchema = mongoose.Schema({
@@ -15,13 +15,6 @@ const UserSchema = mongoose.Schema({
     },
 
 });
-UserSchema.pre('save', async function () {
-    // if user is modified or user is new
-    if (this.isModified('password') || this.isNew) {
-        const salt = await bcryptjs.genSalt();
-        const hash = await bcryptjs.hash(this.password, salt);
-        this.password = hash;
-    }
-});
+UserSchema.plugin(uniquevalidator);
 
 module.exports = mongoose.model("User", UserSchema);
